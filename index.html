@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大帅哥 & 大美女 - 我们的爱情</title>
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Georgia', 'Noto Serif SC', serif;
+  background: #0a0a1a;
+  color: #f0e6d3;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a1a; }
+::-webkit-scrollbar-thumb { background: #e8b4b8; border-radius: 3px; }
+
+/* ========== Canvas Background ========== */
+#starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ========== Moon ========== */
+.moon {
+  position: fixed;
+  top: 60px; right: 80px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: #f5ecd7;
+  box-shadow: 0 0 40px 10px rgba(245,236,215,0.3), 0 0 80px 30px rgba(245,236,215,0.1);
+  z-index: 1;
+  pointer-events: none;
+}
+.moon::after {
+  content: '';
+  position: absolute;
+  top: -8px; left: 14px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: #0a0a1a;
+}
+
+/* ========== Sections ========== */
+section {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ========== Hero ========== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero-names {
+  font-size: 2.8em;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #f0e6d3, #e8b4b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-heart {
+  font-size: 1.6em;
+  margin: 8px 0 24px;
+  animation: heartbeat 1.5s ease-in-out infinite;
+  color: #e8b4b8;
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+}
+.hero-tagline {
+  font-size: 1.1em;
+  color: rgba(240,230,211,0.6);
+  letter-spacing: 0.3em;
+  margin-bottom: 48px;
+}
+
+/* ========== Counter ========== */
+.counter {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.counter-item {
+  background: rgba(232,180,184,0.08);
+  border: 1px solid rgba(232,180,184,0.2);
+  border-radius: 16px;
+  padding: 20px 24px;
+  min-width: 90px;
+  backdrop-filter: blur(10px);
+}
+.counter-num {
+  font-size: 2.4em;
+  font-weight: 700;
+  color: #e8b4b8;
+  line-height: 1;
+}
+.counter-label {
+  font-size: 0.8em;
+  color: rgba(240,230,211,0.5);
+  margin-top: 6px;
+  letter-spacing: 0.1em;
+}
+
+/* ========== Section Title ========== */
+.section-title {
+  text-align: center;
+  font-size: 2em;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  margin: 80px 0 40px;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e8b4b8, transparent);
+  margin: 16px auto 0;
+}
+
+/* ========== Gallery ========== */
+.gallery-places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+.place-btn {
+  background: rgba(232,180,184,0.1);
+  border: 1px solid rgba(232,180,184,0.25);
+  color: #f0e6d3;
+  padding: 10px 28px;
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 0.95em;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+.place-btn:hover, .place-btn.active {
+  background: rgba(232,180,184,0.25);
+  border-color: #e8b4b8;
+  color: #fff;
+}
+.gallery-grid {
+  display: none;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  animation: fadeIn 0.5s ease;
+}
+.gallery-grid.active { display: grid; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.gallery-item:hover { transform: scale(1.03); }
+.gallery-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.gallery-item .place-tag {
+  position: absolute;
+  bottom: 8px; left: 8px;
+  background: rgba(10,10,26,0.7);
+  color: #e8b4b8;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75em;
+  backdrop-filter: blur(6px);
+}
+.gallery-empty {
+  text-align: center;
+  color: rgba(240,230,211,0.4);
+  padding: 60px 0;
+  font-size: 0.95em;
+  line-height: 2;
+}
+
+/* ========== Lightbox ========== */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.lightbox.show { display: flex; }
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  box-shadow: 0 0 60px rgba(232,180,184,0.15);
+}
+.lightbox-close {
+  position: absolute;
+  top: 24px; right: 32px;
+  color: #e8b4b8;
+  font-size: 2em;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.lightbox-close:hover { transform: rotate(90deg); }
+
+/* ========== Letters ========== */
+.letters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+.letter-card {
+  background: rgba(232,180,184,0.06);
+  border: 1px solid rgba(232,180,184,0.15);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.3s ease;
+}
+.letter-card:hover {
+  border-color: rgba(232,180,184,0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(232,180,184,0.1);
+}
+.letter-date {
+  font-size: 0.8em;
+  color: rgba(232,180,184,0.6);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+.letter-from {
+  font-size: 0.85em;
+  color: #e8b4b8;
+  margin-bottom: 8px;
+}
+.letter-content {
+  font-size: 0.95em;
+  line-height: 1.9;
+  color: rgba(240,230,211,0.85);
+}
+.letter-content .typewriter {
+  border-right: 2px solid #e8b4b8;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { border-color: transparent; } }
+
+/* ========== Footer ========== */
+.footer {
+  text-align: center;
+  padding: 60px 0 40px;
+  color: rgba(240,230,211,0.3);
+  font-size: 0.85em;
+  letter-spacing: 0.15em;
+}
+
+/* ========== Nav ========== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 16px;
+  background: rgba(10,10,26,0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(232,180,184,0.1);
+  transition: transform 0.3s ease;
+}
+.nav.hidden { transform: translateY(-100%); }
+.nav a {
+  color: rgba(240,230,211,0.6);
+  text-decoration: none;
+  font-size: 0.85em;
+  letter-spacing: 0.15em;
+  transition: color 0.3s;
+}
+.nav a:hover { color: #e8b4b8; }
+
+/* ========== Responsive ========== */
+@media (max-width: 640px) {
+  .hero-names { font-size: 1.8em; }
+  .counter-item { padding: 14px 16px; min-width: 70px; }
+  .counter-num { font-size: 1.6em; }
+  .section-title { font-size: 1.5em; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .letters-grid { grid-template-columns: 1fr; }
+  .moon { width: 50px; height: 50px; top: 70px; right: 30px; }
+  .moon::after { width: 50px; height: 50px; top: -5px; left: 10px; }
+  .nav { gap: 16px; }
+}
+
+/* ========== Scroll Animations ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="moon"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#home">Home</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#letters">Letters</a>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="home">
+  <div class="hero-names">大帅哥 & 大美女</div>
+  <div class="hero-heart">&#10084;</div>
+  <div class="hero-tagline">OUR LOVE STORY</div>
+  <div class="counter" id="counter">
+    <div class="counter-item">
+      <div class="counter-num" id="c-days">0</div>
+      <div class="counter-label">天</div>
+    </div>
+    <div class="counter-item">
+      <div class="counter-num" id="c-hours">0</div>
+      <div class="counter-label">时</div>
+    </div>
+    <div class="counter-item">
+      <div class="counter-num" id="c-mins">0</div>
+      <div class="counter-label">分</div>
+    </div>
+    <div class="counter-item">
+      <div class="counter-num" id="c-secs">0</div>
+      <div class="counter-label">秒</div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery Section -->
+<section id="gallery">
+  <div class="section-title reveal">相册墙</div>
+  <div class="gallery-places reveal" id="place-btns"></div>
+  <div id="gallery-containers"></div>
+  <div class="gallery-empty reveal" id="gallery-hint">
+    将照片放入 love/photos/ 文件夹下的地点子文件夹中<br>
+    例如：love/photos/北京/ 、love/photos/上海/<br>
+    然后修改下方 JavaScript 中的 galleryData 配置
+  </div>
+</section>
+
+<!-- Letters Section -->
+<section id="letters">
+  <div class="section-title reveal">情书</div>
+  <div class="letters-grid" id="letters-grid"></div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Made with &#10084; for 大美女</p>
+  <p style="margin-top:4px;">2024.09.03 - Forever</p>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+// ========== CONFIG ==========
+const ANNIVERSARY = new Date('2024-09-03T00:00:00');
+
+// 相册配置：按地点分类
+// 将照片放到 love/photos/地点名/ 下，然后在下面添加配置
+// 如果暂时没有照片，可以用占位图
+const galleryData = {
+  '北京': [
+    { src: 'https://picsum.photos/seed/bj1/600/450', tag: '故宫' },
+    { src: 'https://picsum.photos/seed/bj2/600/450', tag: '长城' },
+    { src: 'https://picsum.photos/seed/bj3/600/450', tag: '后海' },
+  ],
+  '上海': [
+    { src: 'https://picsum.photos/seed/sh1/600/450', tag: '外滩' },
+    { src: 'https://picsum.photos/seed/sh2/600/450', tag: '迪士尼' },
+  ],
+  '成都': [
+    { src: 'https://picsum.photos/seed/cd1/600/450', tag: '宽窄巷子' },
+    { src: 'https://picsum.photos/seed/cd2/600/450', tag: '熊猫基地' },
+    { src: 'https://picsum.photos/seed/cd3/600/450', tag: '春熙路' },
+    { src: 'https://picsum.photos/seed/cd4/600/450', tag: '锦里' },
+  ],
+};
+
+// 情书配置
+const lettersData = [
+  {
+    date: '2024.09.03',
+    from: '大帅哥',
+    content: '从今天起，我们的故事开始了。愿每一天都有你，每一刻都值得铭记。'
+  },
+  {
+    date: '2024.12.25',
+    from: '大美女',
+    content: '第一个圣诞节，窗外飘着雪，你在我身边，就是最好的礼物。'
+  },
+  {
+    date: '2025.02.14',
+    from: '大帅哥',
+    content: '情人节快乐，我的大美女。往后余生，风雪是你，平淡是你，清贫是你，荣华是你，心底温柔是你，目光所至也是你。'
+  },
+  {
+    date: '2025.09.03',
+    from: '大美女',
+    content: '一周年了，谢谢你一直在我身边。未来的路很长，但只要牵着手，就不怕。'
+  },
+];
+
+// ========== COUNTER ==========
+function updateCounter() {
+  const now = new Date();
+  const diff = now - ANNIVERSARY;
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const secs = Math.floor((diff % (1000 * 60)) / 1000);
+  document.getElementById('c-days').textContent = days;
+  document.getElementById('c-hours').textContent = String(hours).padStart(2, '0');
+  document.getElementById('c-mins').textContent = String(mins).padStart(2, '0');
+  document.getElementById('c-secs').textContent = String(secs).padStart(2, '0');
+}
+updateCounter();
+setInterval(updateCounter, 1000);
+
+// ========== GALLERY ==========
+let activePlace = null;
+
+function initGallery() {
+  const btnsContainer = document.getElementById('place-btns');
+  const containersDiv = document.getElementById('gallery-containers');
+  const places = Object.keys(galleryData);
+
+  if (places.length === 0) return;
+
+  places.forEach(place => {
+    // Button
+    const btn = document.createElement('button');
+    btn.className = 'place-btn';
+    btn.textContent = place;
+    btn.onclick = () => switchPlace(place);
+    btnsContainer.appendChild(btn);
+
+    // Grid
+    const grid = document.createElement('div');
+    grid.className = 'gallery-grid';
+    grid.id = 'gallery-' + place;
+    galleryData[place].forEach(photo => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `<img src="${photo.src}" alt="${photo.tag}" loading="lazy"><div class="place-tag">${photo.tag}</div>`;
+      item.onclick = () => openLightbox(photo.src);
+      grid.appendChild(item);
+    });
+    containersDiv.appendChild(grid);
+  });
+
+  // Auto activate first place
+  switchPlace(places[0]);
+}
+
+function switchPlace(place) {
+  activePlace = place;
+  document.querySelectorAll('.place-btn').forEach(b => b.classList.toggle('active', b.textContent === place));
+  document.querySelectorAll('.gallery-grid').forEach(g => g.classList.toggle('active', g.id === 'gallery-' + place));
+}
+
+// ========== LIGHTBOX ==========
+function openLightbox(src) {
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightbox-img').src = src;
+  lb.classList.add('show');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ========== LETTERS ==========
+function initLetters() {
+  const grid = document.getElementById('letters-grid');
+  lettersData.forEach((letter, i) => {
+    const card = document.createElement('div');
+    card.className = 'letter-card reveal';
+    card.innerHTML = `
+      <div class="letter-date">${letter.date}</div>
+      <div class="letter-from">From: ${letter.from}</div>
+      <div class="letter-content" id="letter-${i}">${letter.content}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ========== STARFIELD ==========
+function initStarfield() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  let mouseX = 0, mouseY = 0;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX / W - 0.5) * 2;
+    mouseY = (e.clientY / H - 0.5) * 2;
+  });
+
+  // Stars
+  const stars = [];
+  for (let i = 0; i < 260; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.5 + 0.3,
+      speed: Math.random() * 0.3 + 0.05,
+      twinkle: Math.random() * Math.PI * 2,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+    });
+  }
+
+  // Shooting stars
+  const shootingStars = [];
+  function spawnShootingStar() {
+    if (shootingStars.length < 2 && Math.random() < 0.005) {
+      shootingStars.push({
+        x: Math.random() * W * 0.8,
+        y: Math.random() * H * 0.3,
+        len: Math.random() * 80 + 60,
+        speed: Math.random() * 8 + 6,
+        life: 1,
+        angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Stars
+    stars.forEach(s => {
+      s.twinkle += s.twinkleSpeed;
+      const alpha = 0.4 + Math.sin(s.twinkle) * 0.3;
+      const px = s.x + mouseX * s.speed * 8;
+      const py = s.y + mouseY * s.speed * 8;
+      ctx.beginPath();
+      ctx.arc(px, py, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,225,255,${alpha})`;
+      ctx.fill();
+    });
+
+    // Shooting stars
+    spawnShootingStar();
+    for (let i = shootingStars.length - 1; i >= 0; i--) {
+      const ss = shootingStars[i];
+      const endX = ss.x + Math.cos(ss.angle) * ss.len;
+      const endY = ss.y + Math.sin(ss.angle) * ss.len;
+      const grad = ctx.createLinearGradient(ss.x, ss.y, endX, endY);
+      grad.addColorStop(0, `rgba(232,180,184,${ss.life})`);
+      grad.addColorStop(1, `rgba(232,180,184,0)`);
+      ctx.beginPath();
+      ctx.moveTo(ss.x, ss.y);
+      ctx.lineTo(endX, endY);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ss.x += Math.cos(ss.angle) * ss.speed;
+      ss.y += Math.sin(ss.angle) * ss.speed;
+      ss.life -= 0.012;
+      if (ss.life <= 0) shootingStars.splice(i, 1);
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ========== NAV SCROLL ==========
+function initNav() {
+  const nav = document.getElementById('nav');
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const st = window.scrollY;
+    nav.classList.toggle('hidden', st > lastScroll && st > 100);
+    lastScroll = st;
+  });
+}
+
+// ========== SCROLL REVEAL ==========
+function initReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  initStarfield();
+  initGallery();
+  initLetters();
+  initNav();
+  setTimeout(initReveal, 100);
+});
+</script>
+</body>
+</html>
