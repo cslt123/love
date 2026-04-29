@@ -21,7 +21,7 @@ body {
     radial-gradient(circle at 80% 20%, rgba(173,216,230,0.1) 0%, transparent 50%);
 }
 
-/* 纸张纹理 + 横线纸 */
+/* 纸张纹理 */
 body::before {
   content: '';
   position: fixed;
@@ -29,12 +29,11 @@ body::before {
   width: 100%; height: 100%;
   pointer-events: none;
   z-index: 0;
-  /* 纸张噪点 */
   background-image:
     url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
-/* 手绘横线纸背景 */
+/* 手绘横线纸 */
 body::after {
   content: '';
   position: fixed;
@@ -44,10 +43,8 @@ body::after {
   z-index: 0;
   background-image: repeating-linear-gradient(
     0deg,
-    transparent,
-    transparent 31px,
-    rgba(196,117,107,0.045) 31px,
-    rgba(196,117,107,0.045) 32px
+    transparent, transparent 31px,
+    rgba(196,117,107,0.04) 31px, rgba(196,117,107,0.04) 32px
   );
   background-size: 100% 32px;
   background-position: 0 80px;
@@ -57,7 +54,6 @@ body::after {
 ::-webkit-scrollbar-track { background: #faf6f0; }
 ::-webkit-scrollbar-thumb { background: #d4a69a; border-radius: 4px; }
 
-/* ========== 手绘边框 SVG filter ========== */
 .sketchy {
   border: 2px solid #3d3229;
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
@@ -67,7 +63,6 @@ body::after {
   border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
-/* ========== Canvas ========== */
 #starfield {
   position: fixed;
   top: 0; left: 0;
@@ -76,7 +71,6 @@ body::after {
   pointer-events: none;
 }
 
-/* ========== Sections ========== */
 section {
   position: relative;
   z-index: 2;
@@ -185,6 +179,17 @@ section {
   flex-wrap: wrap;
   justify-content: center;
 }
+.counter-wrap {
+  position: relative;
+  background: rgba(255,255,255,0.5);
+  padding: 24px 16px 16px;
+  border-radius: 4px;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 27px,
+    rgba(196,117,107,0.08) 27px, rgba(196,117,107,0.08) 28px
+  );
+  background-position: 0 28px;
+}
 .counter-item {
   background: #fff;
   padding: 16px 20px;
@@ -212,21 +217,13 @@ section {
   font-size: 2em;
   color: #3d3229;
   margin: 80px 0 36px;
-  position: relative;
-  display: inline-block;
-  left: 50%;
-  transform: translateX(-50%) rotate(-1deg);
   background: #fff;
   padding: 8px 32px;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
   box-shadow: 3px 3px 0 rgba(61,50,41,0.06);
-}
-.section-title::before {
-  content: '~ ';
-  color: #d4a69a;
-}
-.section-title::after {
-  content: ' ~';
-  color: #d4a69a;
+  transform: rotate(-1deg);
 }
 
 /* ========== Gallery ========== */
@@ -260,10 +257,8 @@ section {
   display: none;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 20px;
-  animation: fadeUp 0.5s ease;
 }
 .gallery-grid.active { display: grid; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 .gallery-item {
   position: relative;
   overflow: hidden;
@@ -297,7 +292,6 @@ section {
   text-align: center;
   padding: 4px 0;
 }
-/* 和纸胶带装饰 */
 .tape-deco {
   position: absolute;
   top: -6px;
@@ -344,7 +338,11 @@ section {
 }
 .lightbox-close:hover { transform: rotate(90deg) scale(1.2); }
 
-/* ========== Letters / 碎碎念 ========== */
+/* ========== Letters ========== */
+#letters {
+  border-left: 3px solid rgba(196,117,107,0.08);
+  padding-left: 16px !important;
+}
 .letters-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -382,7 +380,6 @@ section {
   line-height: 2;
   color: #3d3229;
 }
-/* 便签图钉 */
 .letter-card .pin {
   position: absolute;
   top: -8px;
@@ -398,15 +395,14 @@ section {
 .letter-card:nth-child(4) .pin { background: #e8d4a0; }
 .letter-card:nth-child(5) .pin { background: #d4a0e8; }
 
-/* ========== Doodle decorations ========== */
+/* ========== Doodle Line ========== */
 .doodle-line {
   text-align: center;
   margin: 40px 0;
-  opacity: 0.3;
-  font-size: 1.2em;
-  letter-spacing: 0.3em;
-  color: #c4756b;
+  position: relative;
+  z-index: 2;
 }
+.doodle-line svg { opacity: 0.25; }
 
 /* ========== Footer ========== */
 .footer {
@@ -430,98 +426,6 @@ section {
   .letters-grid { grid-template-columns: 1fr; }
   .nav { gap: 16px; }
 }
-
-/* ========== Scroll Reveal ========== */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: all 0.7s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ========== 手绘波浪线 ========== */
-.wavy-underline {
-  text-decoration: underline wavy #d4a69a;
-  text-underline-offset: 4px;
-}
-
-/* ========== 手绘角落装饰 ========== */
-.hero::before, .hero::after {
-  font-family: 'Ma Shan Zheng', cursive;
-  position: absolute;
-  font-size: 2.5em;
-  color: rgba(196,117,107,0.12);
-  pointer-events: none;
-}
-.hero::before { content: '✿'; top: 15%; left: 8%; transform: rotate(-15deg); }
-.hero::after { content: '★'; bottom: 20%; right: 8%; transform: rotate(20deg); }
-
-/* 区块之间手绘分隔线用 SVG */
-.doodle-line {
-  text-align: center;
-  margin: 40px 0;
-  position: relative;
-  z-index: 2;
-}
-.doodle-line svg { opacity: 0.25; }
-
-/* 手绘信纸红边线（碎碎念区域） */
-#letters {
-  border-left: 3px solid rgba(196,117,107,0.08);
-  padding-left: 16px !important;
-}
-#letters::before {
-  content: '';
-  position: absolute;
-  left: 8px; top: 0; bottom: 0;
-  width: 1px;
-  background: rgba(196,117,107,0.05);
-}
-
-/* 横线纸效果 for hero counter */
-.counter-wrap {
-  position: relative;
-  background: rgba(255,255,255,0.5);
-  padding: 24px 16px 16px;
-  border-radius: 4px;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 27px,
-    rgba(196,117,107,0.08) 27px,
-    rgba(196,117,107,0.08) 28px
-  );
-  background-position: 0 28px;
-}
-
-/* 手绘箭头标注 */
-.hero-annotation {
-  font-family: 'Ma Shan Zheng', cursive;
-  font-size: 0.85em;
-  color: rgba(196,117,107,0.35);
-  position: absolute;
-  white-space: nowrap;
-}
-.hero-annotation.left {
-  left: 5%; top: 40%;
-  transform: rotate(-8deg);
-}
-.hero-annotation.right {
-  right: 5%; bottom: 35%;
-  transform: rotate(5deg);
-}
-
-/* 照片墙上方的手绘波浪 */
-.gallery-wave {
-  text-align: center;
-  margin: -20px 0 20px;
-  opacity: 0.15;
-  position: relative;
-  z-index: 2;
-}
 </style>
 </head>
 <body>
@@ -544,41 +448,41 @@ section {
   <div class="hero-heart">&#10084;</div>
   <div class="hero-tagline">在一起的每一天，都值得被记住</div>
   <div class="counter-wrap">
-  <div class="counter" id="counter">
-    <div class="counter-item sketchy-light">
-      <div class="counter-num" id="c-days">0</div>
-      <div class="counter-label">天</div>
+    <div class="counter" id="counter">
+      <div class="counter-item sketchy-light">
+        <div class="counter-num" id="c-days">0</div>
+        <div class="counter-label">天</div>
+      </div>
+      <div class="counter-item sketchy-light">
+        <div class="counter-num" id="c-hours">0</div>
+        <div class="counter-label">时</div>
+      </div>
+      <div class="counter-item sketchy-light">
+        <div class="counter-num" id="c-mins">0</div>
+        <div class="counter-label">分</div>
+      </div>
+      <div class="counter-item sketchy-light">
+        <div class="counter-num" id="c-secs">0</div>
+        <div class="counter-label">秒</div>
+      </div>
     </div>
-    <div class="counter-item sketchy-light">
-      <div class="counter-num" id="c-hours">0</div>
-      <div class="counter-label">时</div>
-    </div>
-    <div class="counter-item sketchy-light">
-      <div class="counter-num" id="c-mins">0</div>
-      <div class="counter-label">分</div>
-    </div>
-    <div class="counter-item sketchy-light">
-      <div class="counter-num" id="c-secs">0</div>
-      <div class="counter-label">秒</div>
-    </div>
-  </div>
   </div>
 </section>
 
 <!-- Gallery Section -->
 <section id="gallery">
-  <div class="section-title sketchy reveal">我们的相册</div>
-  <div class="gallery-places reveal" id="place-btns"></div>
+  <div class="section-title sketchy">~ 我们的相册 ~</div>
+  <div class="gallery-places" id="place-btns"></div>
   <div id="gallery-containers"></div>
 </section>
 
-<div class="doodle-line reveal">
+<div class="doodle-line">
   <svg width="200" height="20" viewBox="0 0 200 20"><path d="M0,10 Q25,2 50,10 T100,10 T150,10 T200,10" stroke="#c4756b" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="100" cy="8" r="3" fill="#c4756b" opacity="0.5"/></svg>
 </div>
 
 <!-- Letters Section -->
 <section id="letters">
-  <div class="section-title sketchy reveal">碎碎念</div>
+  <div class="section-title sketchy">~ 碎碎念 ~</div>
   <div class="letters-grid" id="letters-grid"></div>
 </section>
 
@@ -595,10 +499,8 @@ section {
 </div>
 
 <script>
-// ========== CONFIG ==========
 const ANNIVERSARY = new Date('2024-09-03T00:00:00');
 
-// 相册配置 - 按地点分类，使用真实照片
 const galleryData = {
   '深圳': [
     { src: 'photos/深圳串串香.jpg', tag: '串串香！超好吃的' },
@@ -610,66 +512,38 @@ const galleryData = {
   ],
 };
 
-// 碎碎念 - 日常记录
 const lettersData = [
-  {
-    date: '2024.09.03',
-    from: '大帅哥',
-    content: '在一起了！好开心好开心好开心～'
-  },
-  {
-    date: '2024.10.01',
-    from: '大美女',
-    content: '国庆放假啦，想和你一直待在一起不想上班(＞_＜)'
-  },
-  {
-    date: '2024.12.25',
-    from: '大帅哥',
-    content: '第一个圣诞节！虽然没下雪但有你就是最好的礼物啦'
-  },
-  {
-    date: '2025.01.01',
-    from: '大美女',
-    content: '新年快乐！新的一年也要一直在一起哦～'
-  },
-  {
-    date: '2025.09.03',
-    from: '大帅哥',
-    content: '一周年啦！时间过得好快，感觉昨天才刚在一起，谢谢你还愿意陪我嘻嘻'
-  },
+  { date: '2024.09.03', from: '大帅哥', content: '在一起了！好开心好开心好开心～' },
+  { date: '2024.10.01', from: '大美女', content: '国庆放假啦，想和你一直待在一起不想上班(＞_＜)' },
+  { date: '2024.12.25', from: '大帅哥', content: '第一个圣诞节！虽然没下雪但有你就是最好的礼物啦' },
+  { date: '2025.01.01', from: '大美女', content: '新年快乐！新的一年也要一直在一起哦～' },
+  { date: '2025.09.03', from: '大帅哥', content: '一周年啦！时间过得好快，感觉昨天才刚在一起，谢谢你还愿意陪我嘻嘻' },
 ];
 
 // ========== COUNTER ==========
 function updateCounter() {
-  const now = new Date();
-  const diff = now - ANNIVERSARY;
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((diff % (1000 * 60)) / 1000);
-  document.getElementById('c-days').textContent = days;
-  document.getElementById('c-hours').textContent = String(hours).padStart(2, '0');
-  document.getElementById('c-mins').textContent = String(mins).padStart(2, '0');
-  document.getElementById('c-secs').textContent = String(secs).padStart(2, '0');
+  const diff = Date.now() - ANNIVERSARY;
+  document.getElementById('c-days').textContent = Math.floor(diff / 86400000);
+  document.getElementById('c-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+  document.getElementById('c-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+  document.getElementById('c-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
 }
 updateCounter();
 setInterval(updateCounter, 1000);
 
 // ========== GALLERY ==========
-let activePlace = null;
-
 function initGallery() {
-  const btnsContainer = document.getElementById('place-btns');
-  const containersDiv = document.getElementById('gallery-containers');
-  const places = Object.keys(galleryData);
-  if (places.length === 0) return;
-
-  places.forEach(place => {
+  const btns = document.getElementById('place-btns');
+  const containers = document.getElementById('gallery-containers');
+  Object.keys(galleryData).forEach(place => {
     const btn = document.createElement('button');
     btn.className = 'place-btn sketchy-light';
     btn.textContent = place;
-    btn.onclick = () => switchPlace(place);
-    btnsContainer.appendChild(btn);
+    btn.onclick = () => {
+      document.querySelectorAll('.place-btn').forEach(b => b.classList.toggle('active', b.textContent === place));
+      document.querySelectorAll('.gallery-grid').forEach(g => g.classList.toggle('active', g.id === 'gallery-' + place));
+    };
+    btns.appendChild(btn);
 
     const grid = document.createElement('div');
     grid.className = 'gallery-grid';
@@ -677,73 +551,67 @@ function initGallery() {
     galleryData[place].forEach(photo => {
       const item = document.createElement('div');
       item.className = 'gallery-item sketchy-light';
-      item.innerHTML = `
-        <div class="tape-deco"></div>
-        <img src="${photo.src}" alt="${photo.tag}" loading="lazy">
-        <div class="gallery-caption">${photo.tag}</div>
-      `;
+      item.innerHTML = `<div class="tape-deco"></div><img src="${photo.src}" alt="${photo.tag}" loading="lazy"><div class="gallery-caption">${photo.tag}</div>`;
       item.onclick = () => openLightbox(photo.src);
       grid.appendChild(item);
     });
-    containersDiv.appendChild(grid);
+    containers.appendChild(grid);
   });
-
-  switchPlace(places[0]);
-}
-
-function switchPlace(place) {
-  activePlace = place;
-  document.querySelectorAll('.place-btn').forEach(b => b.classList.toggle('active', b.textContent === place));
-  document.querySelectorAll('.gallery-grid').forEach(g => g.classList.toggle('active', g.id === 'gallery-' + place));
+  // Activate first
+  btns.querySelector('.place-btn').classList.add('active');
+  containers.querySelector('.gallery-grid').classList.add('active');
 }
 
 // ========== LIGHTBOX ==========
 function openLightbox(src) {
-  const lb = document.getElementById('lightbox');
   document.getElementById('lightbox-img').src = src;
-  lb.classList.add('show');
+  document.getElementById('lightbox').classList.add('show');
 }
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('show');
-}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('show'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
 // ========== LETTERS ==========
 function initLetters() {
   const grid = document.getElementById('letters-grid');
-  lettersData.forEach((letter, i) => {
+  lettersData.forEach(letter => {
     const card = document.createElement('div');
-    card.className = 'letter-card sketchy-light reveal';
-    card.innerHTML = `
-      <div class="pin"></div>
-      <div class="letter-date">${letter.date}</div>
-      <div class="letter-from">${letter.from} 说：</div>
-      <div class="letter-content">${letter.content}</div>
-    `;
+    card.className = 'letter-card sketchy-light';
+    card.innerHTML = `<div class="pin"></div><div class="letter-date">${letter.date}</div><div class="letter-from">${letter.from} 说：</div><div class="letter-content">${letter.content}</div>`;
     grid.appendChild(card);
   });
 }
 
-// ========== SKETCHY CANVAS BACKGROUND ==========
-function initStarfield() {
+// ========== SKETCHY CANVAS — 手绘背景 ==========
+function initCanvas() {
   const canvas = document.getElementById('starfield');
   const ctx = canvas.getContext('2d');
-  let W, H;
+  let W, H, doodles = [];
 
   function resize() {
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
     generateDoodles();
   }
-  resize();
-  window.addEventListener('resize', resize);
 
-  // ---- 手绘涂鸦 SVG ----
-  const doodles = [];
+  // 大型手绘艺术字水印
+  const watermarkChars = [
+    { text: '爱', x: 0.12, y: 0.18, size: 160, rot: -0.15, alpha: 0.035 },
+    { text: 'LOVE', x: 0.78, y: 0.12, size: 80, rot: 0.1, alpha: 0.03 },
+    { text: '喜欢', x: 0.85, y: 0.45, size: 100, rot: 0.2, alpha: 0.025 },
+    { text: '永远', x: 0.08, y: 0.65, size: 120, rot: -0.12, alpha: 0.03 },
+    { text: '♥', x: 0.5, y: 0.35, size: 200, rot: 0.05, alpha: 0.02 },
+    { text: '想你', x: 0.18, y: 0.88, size: 90, rot: -0.18, alpha: 0.025 },
+    { text: 'Forever', x: 0.75, y: 0.78, size: 60, rot: 0.15, alpha: 0.028 },
+    { text: '抱抱', x: 0.45, y: 0.58, size: 70, rot: -0.08, alpha: 0.022 },
+    { text: '甜', x: 0.92, y: 0.9, size: 110, rot: 0.22, alpha: 0.025 },
+    { text: '亲', x: 0.02, y: 0.4, size: 80, rot: -0.25, alpha: 0.02 },
+  ];
+
   function generateDoodles() {
-    doodles.length = 0;
-    const count = Math.floor(W * H / 40000); // 密度随屏幕大小
-    const types = ['heart','star','flower','spiral','cloud','dot-cluster','squiggle','cross-stitch'];
+    doodles = [];
+    // 小型手绘涂鸦
+    const count = Math.floor(W * H / 35000);
+    const types = ['heart','star','flower','spiral','cloud','squiggle','cross'];
     for (let i = 0; i < count; i++) {
       doodles.push({
         type: types[Math.floor(Math.random() * types.length)],
@@ -754,183 +622,123 @@ function initStarfield() {
         alpha: Math.random() * 0.06 + 0.02,
         color: ['196,117,107','212,166,154','173,216,230','255,182,193','180,210,170','220,190,160'][Math.floor(Math.random() * 6)],
         phase: Math.random() * Math.PI * 2,
-        floatSpeed: Math.random() * 0.003 + 0.001,
-        floatAmp: Math.random() * 3 + 1,
+        fSpeed: Math.random() * 0.003 + 0.001,
+        fAmp: Math.random() * 3 + 1,
       });
     }
   }
 
-  // 手绘爱心
-  function drawSketchHeart(x, y, s, alpha, color, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.strokeStyle = `rgba(${color},${alpha})`;
-    ctx.lineWidth = 1.2;
-    ctx.lineCap = 'round';
+  // === 手绘小元素 ===
+  function sketchHeart(x, y, s, a, c, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(${c},${a})`; ctx.lineWidth = 1.2; ctx.lineCap = 'round';
     ctx.beginPath();
     const r = s / 2;
     ctx.moveTo(0, r * 0.3);
-    // 左半
     ctx.bezierCurveTo(-r * 0.1, -r * 0.3, -r * 0.8, -r * 0.3, -r * 0.8, r * 0.1);
     ctx.bezierCurveTo(-r * 0.8, r * 0.55, 0, r * 0.9, 0, r);
-    // 右半
     ctx.bezierCurveTo(0, r * 0.9, r * 0.8, r * 0.55, r * 0.8, r * 0.1);
     ctx.bezierCurveTo(r * 0.8, -r * 0.3, r * 0.1, -r * 0.3, 0, r * 0.3);
-    ctx.stroke();
-    ctx.restore();
+    ctx.stroke(); ctx.restore();
   }
 
-  // 手绘星星
-  function drawSketchStar(x, y, s, alpha, color, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.strokeStyle = `rgba(${color},${alpha})`;
-    ctx.lineWidth = 1;
-    ctx.lineCap = 'round';
+  function sketchStar(x, y, s, a, c, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(${c},${a})`; ctx.lineWidth = 1; ctx.lineCap = 'round';
     ctx.beginPath();
     for (let i = 0; i < 5; i++) {
-      const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
-      const px = Math.cos(angle) * s * 0.5;
-      const py = Math.sin(angle) * s * 0.5;
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
+      const ang = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+      const px = Math.cos(ang) * s * 0.5, py = Math.sin(ang) * s * 0.5;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
     }
-    ctx.closePath();
-    ctx.stroke();
-    ctx.restore();
+    ctx.closePath(); ctx.stroke(); ctx.restore();
   }
 
-  // 手绘小花
-  function drawSketchFlower(x, y, s, alpha, color, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.strokeStyle = `rgba(${color},${alpha})`;
-    ctx.lineWidth = 1;
-    ctx.lineCap = 'round';
-    const petals = 5;
-    for (let i = 0; i < petals; i++) {
-      const angle = (i / petals) * Math.PI * 2;
+  function sketchFlower(x, y, s, a, c, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(${c},${a})`; ctx.lineWidth = 1; ctx.lineCap = 'round';
+    for (let i = 0; i < 5; i++) {
+      const ang = (i / 5) * Math.PI * 2;
       ctx.beginPath();
-      ctx.ellipse(
-        Math.cos(angle) * s * 0.2,
-        Math.sin(angle) * s * 0.2,
-        s * 0.18, s * 0.1,
-        angle, 0, Math.PI * 2
-      );
+      ctx.ellipse(Math.cos(ang) * s * 0.2, Math.sin(ang) * s * 0.2, s * 0.18, s * 0.1, ang, 0, Math.PI * 2);
       ctx.stroke();
     }
-    // 花心
-    ctx.beginPath();
-    ctx.arc(0, 0, s * 0.06, 0, Math.PI * 2);
-    ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, s * 0.06, 0, Math.PI * 2); ctx.stroke();
     ctx.restore();
   }
 
-  // 手绘螺旋
-  function drawSketchSpiral(x, y, s, alpha, color, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.strokeStyle = `rgba(${color},${alpha})`;
-    ctx.lineWidth = 1;
-    ctx.lineCap = 'round';
+  function sketchSpiral(x, y, s, a, c, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(${c},${a})`; ctx.lineWidth = 1; ctx.lineCap = 'round';
     ctx.beginPath();
     for (let t = 0; t < Math.PI * 4; t += 0.15) {
       const r = (t / (Math.PI * 4)) * s * 0.4;
-      const px = Math.cos(t) * r;
-      const py = Math.sin(t) * r;
-      if (t === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
+      t === 0 ? ctx.moveTo(Math.cos(t) * r, Math.sin(t) * r) : ctx.lineTo(Math.cos(t) * r, Math.sin(t) * r);
     }
-    ctx.stroke();
-    ctx.restore();
+    ctx.stroke(); ctx.restore();
   }
 
-  // 手绘云朵
-  function drawSketchCloud(x, y, s, alpha, color, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.strokeStyle = `rgba(${color},${alpha})`;
-    ctx.lineWidth = 1;
-    ctx.lineCap = 'round';
+  function sketchCloud(x, y, s, a, c, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(${c},${a})`; ctx.lineWidth = 1; ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.arc(0, 0, s * 0.25, Math.PI * 0.8, Math.PI * 0.2, true);
+    ctx.stroke();
+    ctx.beginPath();
     ctx.arc(s * 0.2, -s * 0.05, s * 0.18, Math.PI * 0.9, Math.PI * 0.1, true);
+    ctx.stroke();
+    ctx.beginPath();
     ctx.arc(-s * 0.2, -s * 0.03, s * 0.16, Math.PI * 0.85, Math.PI * 0.15, true);
     ctx.stroke();
     ctx.restore();
   }
 
-  // 手绘点簇
-  function drawDotCluster(x, y, s, alpha, color) {
-    ctx.fillStyle = `rgba(${color},${alpha})`;
-    for (let i = 0; i < 5; i++) {
-      const dx = (Math.random() - 0.5) * s * 0.5;
-      const dy = (Math.random() - 0.5) * s * 0.5;
-      const r = Math.random() * 1.5 + 0.5;
-      ctx.beginPath();
-      ctx.arc(x + dx, y + dy, r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  // 手绘波浪线
-  function drawSquiggle(x, y, s, alpha, color, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.strokeStyle = `rgba(${color},${alpha})`;
-    ctx.lineWidth = 1;
-    ctx.lineCap = 'round';
+  function sketchSquiggle(x, y, s, a, c, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(${c},${a})`; ctx.lineWidth = 1; ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(-s * 0.4, 0);
-    for (let t = 0; t < s * 0.8; t += 2) {
-      ctx.lineTo(-s * 0.4 + t, Math.sin(t * 0.3) * s * 0.12);
-    }
-    ctx.stroke();
-    ctx.restore();
+    for (let t = 0; t < s * 0.8; t += 2) ctx.lineTo(-s * 0.4 + t, Math.sin(t * 0.3) * s * 0.12);
+    ctx.stroke(); ctx.restore();
   }
 
-  // 手绘十字绣
-  function drawCrossStitch(x, y, s, alpha, color, rot) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(rot);
-    ctx.strokeStyle = `rgba(${color},${alpha})`;
-    ctx.lineWidth = 1;
-    ctx.lineCap = 'round';
+  function sketchCross(x, y, s, a, c, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot);
+    ctx.strokeStyle = `rgba(${c},${a})`; ctx.lineWidth = 1; ctx.lineCap = 'round';
     const h = s * 0.2;
     ctx.beginPath();
     ctx.moveTo(-h, -h); ctx.lineTo(h, h);
     ctx.moveTo(h, -h); ctx.lineTo(-h, h);
-    ctx.stroke();
+    ctx.stroke(); ctx.restore();
+  }
+
+  const drawFns = { heart: sketchHeart, star: sketchStar, flower: sketchFlower, spiral: sketchSpiral, cloud: sketchCloud, squiggle: sketchSquiggle, cross: sketchCross };
+
+  // === 手绘大艺术字 ===
+  function drawWatermarkText(wm) {
+    ctx.save();
+    ctx.translate(wm.x * W, wm.y * H);
+    ctx.rotate(wm.rot);
+    ctx.font = `${wm.size}px 'Ma Shan Zheng', cursive`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = `rgba(196,117,107,${wm.alpha})`;
+    ctx.fillText(wm.text, 0, 0);
+    // 手绘描边效果
+    ctx.strokeStyle = `rgba(196,117,107,${wm.alpha * 0.6})`;
+    ctx.lineWidth = 1;
+    ctx.strokeText(wm.text, 0, 0);
     ctx.restore();
   }
 
-  const drawFns = {
-    'heart': drawSketchHeart,
-    'star': drawSketchStar,
-    'flower': drawSketchFlower,
-    'spiral': drawSketchSpiral,
-    'cloud': drawSketchCloud,
-    'dot-cluster': drawDotCluster,
-    'squiggle': drawSquiggle,
-    'cross-stitch': drawCrossStitch,
-  };
-
-  // ---- 飘落手绘小元素 ----
+  // === 飘落元素 ===
   const floaters = [];
   function spawnFloater() {
-    if (floaters.length < 8 && Math.random() < 0.012) {
+    if (floaters.length < 8 && Math.random() < 0.01) {
       const types = ['heart','star','flower'];
       floaters.push({
-        type: types[Math.floor(Math.random() * types.length)],
-        x: Math.random() * W,
-        y: -30,
+        type: types[Math.floor(Math.random() * 3)],
+        x: Math.random() * W, y: -30,
         size: Math.random() * 10 + 8,
         vy: Math.random() * 0.4 + 0.2,
         vx: (Math.random() - 0.5) * 0.4,
@@ -947,26 +755,36 @@ function initStarfield() {
     ctx.clearRect(0, 0, W, H);
     t++;
 
-    // 绘制静态手绘涂鸦（带微微浮动）
-    doodles.forEach(d => {
-      const floatY = Math.sin(t * d.floatSpeed + d.phase) * d.floatAmp;
-      const fn = drawFns[d.type];
-      if (fn) {
-        if (d.type === 'dot-cluster') {
-          fn(d.x, d.y + floatY, d.size, d.alpha, d.color);
-        } else {
-          fn(d.x, d.y + floatY, d.size, d.alpha, d.color, d.rotate);
-        }
-      }
+    // 大型艺术字水印
+    watermarkChars.forEach(wm => {
+      const floatY = Math.sin(t * 0.001 + wm.x * 10) * 4;
+      const floatX = Math.cos(t * 0.0008 + wm.y * 10) * 2;
+      ctx.save();
+      ctx.translate(wm.x * W + floatX, wm.y * H + floatY);
+      ctx.rotate(wm.rot);
+      ctx.font = `${wm.size}px 'Ma Shan Zheng', cursive`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = `rgba(196,117,107,${wm.alpha})`;
+      ctx.fillText(wm.text, 0, 0);
+      ctx.strokeStyle = `rgba(196,117,107,${wm.alpha * 0.5})`;
+      ctx.lineWidth = 0.8;
+      ctx.strokeText(wm.text, 0, 0);
+      ctx.restore();
     });
 
-    // 飘落元素
+    // 小涂鸦
+    doodles.forEach(d => {
+      const fy = Math.sin(t * d.fSpeed + d.phase) * d.fAmp;
+      const fn = drawFns[d.type];
+      if (fn) fn(d.x, d.y + fy, d.size, d.alpha, d.color, d.rotate);
+    });
+
+    // 飘落
     spawnFloater();
     for (let i = floaters.length - 1; i >= 0; i--) {
       const f = floaters[i];
-      f.y += f.vy;
-      f.x += f.vx;
-      f.rotate += f.rotSpeed;
+      f.y += f.vy; f.x += f.vx; f.rotate += f.rotSpeed;
       const fn = drawFns[f.type];
       if (fn) fn(f.x, f.y, f.size, f.alpha, f.color, f.rotate);
       if (f.y > H + 40) floaters.splice(i, 1);
@@ -974,37 +792,28 @@ function initStarfield() {
 
     requestAnimationFrame(draw);
   }
+
+  resize();
+  window.addEventListener('resize', resize);
   draw();
 }
 
-// ========== NAV SCROLL ==========
+// ========== NAV ==========
 function initNav() {
   const nav = document.getElementById('nav');
-  let lastScroll = 0;
+  let last = 0;
   window.addEventListener('scroll', () => {
-    const st = window.scrollY;
-    nav.classList.toggle('hidden', st > lastScroll && st > 100);
-    lastScroll = st;
+    nav.classList.toggle('hidden', window.scrollY > last && window.scrollY > 100);
+    last = window.scrollY;
   });
-}
-
-// ========== SCROLL REVEAL ==========
-function initReveal() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
 
 // ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
-  initStarfield();
+  initCanvas();
   initGallery();
   initLetters();
   initNav();
-  setTimeout(initReveal, 100);
 });
 </script>
 </body>
