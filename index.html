@@ -3,23 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>大帅哥 & 大美女 - 我们的爱情</title>
+<title>大帅哥 & 大美女 - 我们的小日子</title>
 <style>
-/* ========== Reset & Base ========== */
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Georgia', 'Noto Serif SC', serif;
-  background: #0a0a1a;
-  color: #f0e6d3;
+  font-family: 'ZCOOL XiaoWei', 'Ma Shan Zheng', serif;
+  background: #faf6f0;
+  color: #3d3229;
   overflow-x: hidden;
   min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(255,182,193,0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(173,216,230,0.1) 0%, transparent 50%);
 }
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0a0a1a; }
-::-webkit-scrollbar-thumb { background: #e8b4b8; border-radius: 3px; }
 
-/* ========== Canvas Background ========== */
+/* 纸张纹理 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #faf6f0; }
+::-webkit-scrollbar-thumb { background: #d4a69a; border-radius: 4px; }
+
+/* ========== 手绘边框 SVG filter ========== */
+.sketchy {
+  border: 2px solid #3d3229;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+.sketchy-light {
+  border: 1.5px solid rgba(61,50,41,0.25);
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+/* ========== Canvas ========== */
 #starfield {
   position: fixed;
   top: 0; left: 0;
@@ -28,259 +55,13 @@ body {
   pointer-events: none;
 }
 
-/* ========== Moon ========== */
-.moon {
-  position: fixed;
-  top: 60px; right: 80px;
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: #f5ecd7;
-  box-shadow: 0 0 40px 10px rgba(245,236,215,0.3), 0 0 80px 30px rgba(245,236,215,0.1);
-  z-index: 1;
-  pointer-events: none;
-}
-.moon::after {
-  content: '';
-  position: absolute;
-  top: -8px; left: 14px;
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: #0a0a1a;
-}
-
 /* ========== Sections ========== */
 section {
   position: relative;
   z-index: 2;
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* ========== Hero ========== */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-.hero-names {
-  font-size: 2.8em;
-  font-weight: 300;
-  letter-spacing: 0.15em;
-  margin-bottom: 12px;
-  background: linear-gradient(135deg, #f0e6d3, #e8b4b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hero-heart {
-  font-size: 1.6em;
-  margin: 8px 0 24px;
-  animation: heartbeat 1.5s ease-in-out infinite;
-  color: #e8b4b8;
-}
-@keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  15% { transform: scale(1.15); }
-  30% { transform: scale(1); }
-  45% { transform: scale(1.1); }
-}
-.hero-tagline {
-  font-size: 1.1em;
-  color: rgba(240,230,211,0.6);
-  letter-spacing: 0.3em;
-  margin-bottom: 48px;
-}
-
-/* ========== Counter ========== */
-.counter {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.counter-item {
-  background: rgba(232,180,184,0.08);
-  border: 1px solid rgba(232,180,184,0.2);
-  border-radius: 16px;
-  padding: 20px 24px;
-  min-width: 90px;
-  backdrop-filter: blur(10px);
-}
-.counter-num {
-  font-size: 2.4em;
-  font-weight: 700;
-  color: #e8b4b8;
-  line-height: 1;
-}
-.counter-label {
-  font-size: 0.8em;
-  color: rgba(240,230,211,0.5);
-  margin-top: 6px;
-  letter-spacing: 0.1em;
-}
-
-/* ========== Section Title ========== */
-.section-title {
-  text-align: center;
-  font-size: 2em;
-  font-weight: 300;
-  letter-spacing: 0.2em;
-  margin: 80px 0 40px;
-  position: relative;
-}
-.section-title::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #e8b4b8, transparent);
-  margin: 16px auto 0;
-}
-
-/* ========== Gallery ========== */
-.gallery-places {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-  margin-bottom: 32px;
-}
-.place-btn {
-  background: rgba(232,180,184,0.1);
-  border: 1px solid rgba(232,180,184,0.25);
-  color: #f0e6d3;
-  padding: 10px 28px;
-  border-radius: 24px;
-  cursor: pointer;
-  font-size: 0.95em;
-  letter-spacing: 0.1em;
-  transition: all 0.3s ease;
-  font-family: inherit;
-}
-.place-btn:hover, .place-btn.active {
-  background: rgba(232,180,184,0.25);
-  border-color: #e8b4b8;
-  color: #fff;
-}
-.gallery-grid {
-  display: none;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  animation: fadeIn 0.5s ease;
-}
-.gallery-grid.active { display: grid; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.gallery-item {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  aspect-ratio: 4/3;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-.gallery-item:hover { transform: scale(1.03); }
-.gallery-item img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
-.gallery-item .place-tag {
-  position: absolute;
-  bottom: 8px; left: 8px;
-  background: rgba(10,10,26,0.7);
-  color: #e8b4b8;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.75em;
-  backdrop-filter: blur(6px);
-}
-.gallery-empty {
-  text-align: center;
-  color: rgba(240,230,211,0.4);
-  padding: 60px 0;
-  font-size: 0.95em;
-  line-height: 2;
-}
-
-/* ========== Lightbox ========== */
-.lightbox {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.92);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.lightbox.show { display: flex; }
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 8px;
-  box-shadow: 0 0 60px rgba(232,180,184,0.15);
-}
-.lightbox-close {
-  position: absolute;
-  top: 24px; right: 32px;
-  color: #e8b4b8;
-  font-size: 2em;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.lightbox-close:hover { transform: rotate(90deg); }
-
-/* ========== Letters ========== */
-.letters-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
-}
-.letter-card {
-  background: rgba(232,180,184,0.06);
-  border: 1px solid rgba(232,180,184,0.15);
-  border-radius: 16px;
-  padding: 28px;
-  transition: all 0.3s ease;
-}
-.letter-card:hover {
-  border-color: rgba(232,180,184,0.4);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(232,180,184,0.1);
-}
-.letter-date {
-  font-size: 0.8em;
-  color: rgba(232,180,184,0.6);
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
-}
-.letter-from {
-  font-size: 0.85em;
-  color: #e8b4b8;
-  margin-bottom: 8px;
-}
-.letter-content {
-  font-size: 0.95em;
-  line-height: 1.9;
-  color: rgba(240,230,211,0.85);
-}
-.letter-content .typewriter {
-  border-right: 2px solid #e8b4b8;
-  animation: blink 1s step-end infinite;
-}
-@keyframes blink { 50% { border-color: transparent; } }
-
-/* ========== Footer ========== */
-.footer {
-  text-align: center;
-  padding: 60px 0 40px;
-  color: rgba(240,230,211,0.3);
-  font-size: 0.85em;
-  letter-spacing: 0.15em;
+  padding: 0 20px;
 }
 
 /* ========== Nav ========== */
@@ -290,79 +71,396 @@ section {
   z-index: 100;
   display: flex;
   justify-content: center;
-  gap: 32px;
-  padding: 16px;
-  background: rgba(10,10,26,0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(232,180,184,0.1);
+  gap: 28px;
+  padding: 14px;
+  background: rgba(250,246,240,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1.5px dashed rgba(61,50,41,0.15);
   transition: transform 0.3s ease;
 }
 .nav.hidden { transform: translateY(-100%); }
 .nav a {
-  color: rgba(240,230,211,0.6);
+  color: rgba(61,50,41,0.5);
   text-decoration: none;
-  font-size: 0.85em;
+  font-size: 1em;
   letter-spacing: 0.15em;
   transition: color 0.3s;
+  font-family: 'Ma Shan Zheng', cursive;
 }
-.nav a:hover { color: #e8b4b8; }
+.nav a:hover { color: #c4756b; }
+
+/* ========== Hero ========== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 60px;
+}
+.hero-tape {
+  background: #f5deb3;
+  color: #8b6914;
+  font-size: 0.8em;
+  padding: 6px 32px;
+  letter-spacing: 0.2em;
+  transform: rotate(-2deg);
+  margin-bottom: 32px;
+  position: relative;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.08);
+}
+.hero-tape::before, .hero-tape::after {
+  content: '';
+  position: absolute;
+  width: 12px; height: 12px;
+  background: rgba(250,246,240,0.7);
+  border-radius: 50%;
+  top: 50%; transform: translateY(-50%);
+}
+.hero-tape::before { left: 4px; }
+.hero-tape::after { right: 4px; }
+.hero-names {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 3.2em;
+  color: #c4756b;
+  line-height: 1.3;
+}
+.hero-amp {
+  color: #d4a69a;
+  font-size: 0.7em;
+  display: inline-block;
+  animation: wiggle 3s ease-in-out infinite;
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+}
+.hero-heart {
+  font-size: 1.4em;
+  margin: 16px 0;
+  animation: heartbeat 1.5s ease-in-out infinite;
+  color: #c4756b;
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.2); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+}
+.hero-tagline {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 1.3em;
+  color: rgba(61,50,41,0.45);
+  margin-bottom: 40px;
+  transform: rotate(-1deg);
+}
+
+/* ========== Counter ========== */
+.counter {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.counter-item {
+  background: #fff;
+  padding: 16px 20px;
+  min-width: 80px;
+  text-align: center;
+  box-shadow: 3px 3px 0 rgba(61,50,41,0.06);
+}
+.counter-num {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 2.2em;
+  color: #c4756b;
+  line-height: 1;
+}
+.counter-label {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 0.9em;
+  color: rgba(61,50,41,0.4);
+  margin-top: 4px;
+}
+
+/* ========== Section Title ========== */
+.section-title {
+  font-family: 'Ma Shan Zheng', cursive;
+  text-align: center;
+  font-size: 2em;
+  color: #3d3229;
+  margin: 80px 0 36px;
+  position: relative;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  background: #fff;
+  padding: 8px 32px;
+  box-shadow: 3px 3px 0 rgba(61,50,41,0.06);
+}
+.section-title::before {
+  content: '~ ';
+  color: #d4a69a;
+}
+.section-title::after {
+  content: ' ~';
+  color: #d4a69a;
+}
+
+/* ========== Gallery ========== */
+.gallery-places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+.place-btn {
+  background: #fff;
+  border: 1.5px solid rgba(61,50,41,0.15);
+  color: #3d3229;
+  padding: 8px 24px;
+  cursor: pointer;
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 1.05em;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  box-shadow: 2px 2px 0 rgba(61,50,41,0.04);
+}
+.place-btn:hover, .place-btn.active {
+  background: #c4756b;
+  border-color: #c4756b;
+  color: #fff;
+  transform: rotate(-1deg);
+  box-shadow: 3px 3px 0 rgba(196,117,107,0.2);
+}
+.gallery-grid {
+  display: none;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  animation: fadeUp 0.5s ease;
+}
+.gallery-grid.active { display: grid; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  background: #fff;
+  padding: 10px 10px 40px 10px;
+  box-shadow: 3px 4px 0 rgba(61,50,41,0.06);
+  transform: rotate(var(--rotate, 0deg));
+}
+.gallery-item:nth-child(odd) { --rotate: -1deg; }
+.gallery-item:nth-child(even) { --rotate: 1.5deg; }
+.gallery-item:hover {
+  transform: rotate(0deg) scale(1.03);
+  box-shadow: 4px 6px 0 rgba(61,50,41,0.1);
+}
+.gallery-item img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+.gallery-caption {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  right: 10px;
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 1em;
+  color: #3d3229;
+  text-align: center;
+  padding: 4px 0;
+}
+/* 和纸胶带装饰 */
+.tape-deco {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(var(--tape-rotate, 0deg));
+  width: 60px;
+  height: 18px;
+  background: rgba(245,222,179,0.85);
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.08);
+  z-index: 2;
+}
+.gallery-item:nth-child(1) .tape-deco { --tape-rotate: -3deg; background: rgba(255,182,193,0.6); }
+.gallery-item:nth-child(2) .tape-deco { --tape-rotate: 2deg; background: rgba(173,216,230,0.6); }
+.gallery-item:nth-child(3) .tape-deco { --tape-rotate: -1deg; background: rgba(144,238,144,0.5); }
+.gallery-item:nth-child(4) .tape-deco { --tape-rotate: 3deg; background: rgba(255,218,185,0.7); }
+
+/* ========== Lightbox ========== */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(250,246,240,0.95);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.lightbox.show { display: flex; }
+.lightbox img {
+  max-width: 88%;
+  max-height: 88%;
+  border-radius: 4px;
+  box-shadow: 4px 6px 20px rgba(0,0,0,0.15);
+}
+.lightbox-close {
+  position: absolute;
+  top: 24px; right: 32px;
+  color: #c4756b;
+  font-size: 2.2em;
+  cursor: pointer;
+  font-family: 'Ma Shan Zheng', cursive;
+  transition: transform 0.2s;
+}
+.lightbox-close:hover { transform: rotate(90deg) scale(1.2); }
+
+/* ========== Letters / 碎碎念 ========== */
+.letters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+.letter-card {
+  background: #fff;
+  padding: 24px;
+  box-shadow: 3px 3px 0 rgba(61,50,41,0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  transform: rotate(var(--card-rotate, 0deg));
+}
+.letter-card:nth-child(odd) { --card-rotate: -0.8deg; }
+.letter-card:nth-child(even) { --card-rotate: 0.6deg; }
+.letter-card:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 4px 6px 0 rgba(196,117,107,0.12);
+}
+.letter-date {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 0.85em;
+  color: #d4a69a;
+  margin-bottom: 8px;
+}
+.letter-from {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 0.95em;
+  color: #c4756b;
+  margin-bottom: 8px;
+}
+.letter-content {
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 1.1em;
+  line-height: 2;
+  color: #3d3229;
+}
+/* 便签图钉 */
+.letter-card .pin {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+}
+.letter-card:nth-child(1) .pin { background: #e8a0a0; }
+.letter-card:nth-child(2) .pin { background: #a0c4e8; }
+.letter-card:nth-child(3) .pin { background: #a0e8b0; }
+.letter-card:nth-child(4) .pin { background: #e8d4a0; }
+.letter-card:nth-child(5) .pin { background: #d4a0e8; }
+
+/* ========== Doodle decorations ========== */
+.doodle-line {
+  text-align: center;
+  margin: 40px 0;
+  opacity: 0.3;
+  font-size: 1.2em;
+  letter-spacing: 0.3em;
+  color: #c4756b;
+}
+
+/* ========== Footer ========== */
+.footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 60px 20px 40px;
+  color: rgba(61,50,41,0.35);
+  font-family: 'Ma Shan Zheng', cursive;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+}
 
 /* ========== Responsive ========== */
 @media (max-width: 640px) {
-  .hero-names { font-size: 1.8em; }
-  .counter-item { padding: 14px 16px; min-width: 70px; }
+  .hero-names { font-size: 2.2em; }
+  .counter-item { padding: 12px 14px; min-width: 65px; }
   .counter-num { font-size: 1.6em; }
-  .section-title { font-size: 1.5em; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .section-title { font-size: 1.5em; padding: 6px 20px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .letters-grid { grid-template-columns: 1fr; }
-  .moon { width: 50px; height: 50px; top: 70px; right: 30px; }
-  .moon::after { width: 50px; height: 50px; top: -5px; left: 10px; }
   .nav { gap: 16px; }
 }
 
-/* ========== Scroll Animations ========== */
+/* ========== Scroll Reveal ========== */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease;
+  transform: translateY(24px);
+  transition: all 0.7s ease;
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ========== 手绘波浪线 ========== */
+.wavy-underline {
+  text-decoration: underline wavy #d4a69a;
+  text-underline-offset: 4px;
 }
 </style>
 </head>
 <body>
 
 <canvas id="starfield"></canvas>
-<div class="moon"></div>
 
 <!-- Navigation -->
 <nav class="nav" id="nav">
-  <a href="#home">Home</a>
-  <a href="#gallery">Gallery</a>
-  <a href="#letters">Letters</a>
+  <a href="#home">首页</a>
+  <a href="#gallery">相册</a>
+  <a href="#letters">碎碎念</a>
 </nav>
 
 <!-- Hero Section -->
 <section class="hero" id="home">
-  <div class="hero-names">大帅哥 & 大美女</div>
+  <div class="hero-tape">EST. 2024.09.03</div>
+  <div class="hero-names">
+    大帅哥 <span class="hero-amp">&</span> 大美女
+  </div>
   <div class="hero-heart">&#10084;</div>
-  <div class="hero-tagline">OUR LOVE STORY</div>
+  <div class="hero-tagline">在一起的每一天，都值得被记住</div>
   <div class="counter" id="counter">
-    <div class="counter-item">
+    <div class="counter-item sketchy-light">
       <div class="counter-num" id="c-days">0</div>
       <div class="counter-label">天</div>
     </div>
-    <div class="counter-item">
+    <div class="counter-item sketchy-light">
       <div class="counter-num" id="c-hours">0</div>
       <div class="counter-label">时</div>
     </div>
-    <div class="counter-item">
+    <div class="counter-item sketchy-light">
       <div class="counter-num" id="c-mins">0</div>
       <div class="counter-label">分</div>
     </div>
-    <div class="counter-item">
+    <div class="counter-item sketchy-light">
       <div class="counter-num" id="c-secs">0</div>
       <div class="counter-label">秒</div>
     </div>
@@ -371,26 +469,23 @@ section {
 
 <!-- Gallery Section -->
 <section id="gallery">
-  <div class="section-title reveal">相册墙</div>
+  <div class="section-title sketchy reveal">我们的相册</div>
   <div class="gallery-places reveal" id="place-btns"></div>
   <div id="gallery-containers"></div>
-  <div class="gallery-empty reveal" id="gallery-hint">
-    将照片放入 love/photos/ 文件夹下的地点子文件夹中<br>
-    例如：love/photos/北京/ 、love/photos/上海/<br>
-    然后修改下方 JavaScript 中的 galleryData 配置
-  </div>
 </section>
+
+<div class="doodle-line reveal">- - - - - &#10084; - - - - -</div>
 
 <!-- Letters Section -->
 <section id="letters">
-  <div class="section-title reveal">情书</div>
+  <div class="section-title sketchy reveal">碎碎念</div>
   <div class="letters-grid" id="letters-grid"></div>
 </section>
 
 <!-- Footer -->
 <div class="footer">
-  <p>Made with &#10084; for 大美女</p>
-  <p style="margin-top:4px;">2024.09.03 - Forever</p>
+  <p>用 &#10084; 写给大美女</p>
+  <p style="margin-top:6px; opacity: 0.6;">2024.09.03 — 永远</p>
 </div>
 
 <!-- Lightbox -->
@@ -403,48 +498,44 @@ section {
 // ========== CONFIG ==========
 const ANNIVERSARY = new Date('2024-09-03T00:00:00');
 
-// 相册配置：按地点分类
-// 将照片放到 love/photos/地点名/ 下，然后在下面添加配置
-// 如果暂时没有照片，可以用占位图
+// 相册配置 - 按地点分类，使用真实照片
 const galleryData = {
-  '北京': [
-    { src: 'https://picsum.photos/seed/bj1/600/450', tag: '故宫' },
-    { src: 'https://picsum.photos/seed/bj2/600/450', tag: '长城' },
-    { src: 'https://picsum.photos/seed/bj3/600/450', tag: '后海' },
+  '深圳': [
+    { src: 'photos/深圳串串香.jpg', tag: '串串香！超好吃的' },
+    { src: 'photos/深圳机场照片.jpg', tag: '深圳机场' },
+    { src: 'photos/深圳韩国菜.jpg', tag: '韩国菜～' },
   ],
-  '上海': [
-    { src: 'https://picsum.photos/seed/sh1/600/450', tag: '外滩' },
-    { src: 'https://picsum.photos/seed/sh2/600/450', tag: '迪士尼' },
-  ],
-  '成都': [
-    { src: 'https://picsum.photos/seed/cd1/600/450', tag: '宽窄巷子' },
-    { src: 'https://picsum.photos/seed/cd2/600/450', tag: '熊猫基地' },
-    { src: 'https://picsum.photos/seed/cd3/600/450', tag: '春熙路' },
-    { src: 'https://picsum.photos/seed/cd4/600/450', tag: '锦里' },
+  '广州': [
+    { src: 'photos/广州油麻山.jpg', tag: '油麻山徒步' },
   ],
 };
 
-// 情书配置
+// 碎碎念 - 日常记录
 const lettersData = [
   {
     date: '2024.09.03',
     from: '大帅哥',
-    content: '从今天起，我们的故事开始了。愿每一天都有你，每一刻都值得铭记。'
+    content: '在一起了！好开心好开心好开心～'
+  },
+  {
+    date: '2024.10.01',
+    from: '大美女',
+    content: '国庆放假啦，想和你一直待在一起不想上班(＞_＜)'
   },
   {
     date: '2024.12.25',
-    from: '大美女',
-    content: '第一个圣诞节，窗外飘着雪，你在我身边，就是最好的礼物。'
+    from: '大帅哥',
+    content: '第一个圣诞节！虽然没下雪但有你就是最好的礼物啦'
   },
   {
-    date: '2025.02.14',
-    from: '大帅哥',
-    content: '情人节快乐，我的大美女。往后余生，风雪是你，平淡是你，清贫是你，荣华是你，心底温柔是你，目光所至也是你。'
+    date: '2025.01.01',
+    from: '大美女',
+    content: '新年快乐！新的一年也要一直在一起哦～'
   },
   {
     date: '2025.09.03',
-    from: '大美女',
-    content: '一周年了，谢谢你一直在我身边。未来的路很长，但只要牵着手，就不怕。'
+    from: '大帅哥',
+    content: '一周年啦！时间过得好快，感觉昨天才刚在一起，谢谢你还愿意陪我嘻嘻'
   },
 ];
 
@@ -471,32 +562,32 @@ function initGallery() {
   const btnsContainer = document.getElementById('place-btns');
   const containersDiv = document.getElementById('gallery-containers');
   const places = Object.keys(galleryData);
-
   if (places.length === 0) return;
 
   places.forEach(place => {
-    // Button
     const btn = document.createElement('button');
-    btn.className = 'place-btn';
+    btn.className = 'place-btn sketchy-light';
     btn.textContent = place;
     btn.onclick = () => switchPlace(place);
     btnsContainer.appendChild(btn);
 
-    // Grid
     const grid = document.createElement('div');
     grid.className = 'gallery-grid';
     grid.id = 'gallery-' + place;
     galleryData[place].forEach(photo => {
       const item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = `<img src="${photo.src}" alt="${photo.tag}" loading="lazy"><div class="place-tag">${photo.tag}</div>`;
+      item.className = 'gallery-item sketchy-light';
+      item.innerHTML = `
+        <div class="tape-deco"></div>
+        <img src="${photo.src}" alt="${photo.tag}" loading="lazy">
+        <div class="gallery-caption">${photo.tag}</div>
+      `;
       item.onclick = () => openLightbox(photo.src);
       grid.appendChild(item);
     });
     containersDiv.appendChild(grid);
   });
 
-  // Auto activate first place
   switchPlace(places[0]);
 }
 
@@ -522,22 +613,22 @@ function initLetters() {
   const grid = document.getElementById('letters-grid');
   lettersData.forEach((letter, i) => {
     const card = document.createElement('div');
-    card.className = 'letter-card reveal';
+    card.className = 'letter-card sketchy-light reveal';
     card.innerHTML = `
+      <div class="pin"></div>
       <div class="letter-date">${letter.date}</div>
-      <div class="letter-from">From: ${letter.from}</div>
-      <div class="letter-content" id="letter-${i}">${letter.content}</div>
+      <div class="letter-from">${letter.from} 说：</div>
+      <div class="letter-content">${letter.content}</div>
     `;
     grid.appendChild(card);
   });
 }
 
-// ========== STARFIELD ==========
+// ========== STARFIELD (soft version for light theme) ==========
 function initStarfield() {
   const canvas = document.getElementById('starfield');
   const ctx = canvas.getContext('2d');
   let W, H;
-  let mouseX = 0, mouseY = 0;
 
   function resize() {
     W = canvas.width = window.innerWidth;
@@ -545,73 +636,76 @@ function initStarfield() {
   }
   resize();
   window.addEventListener('resize', resize);
-  document.addEventListener('mousemove', e => {
-    mouseX = (e.clientX / W - 0.5) * 2;
-    mouseY = (e.clientY / H - 0.5) * 2;
-  });
 
-  // Stars
-  const stars = [];
-  for (let i = 0; i < 260; i++) {
-    stars.push({
+  // Soft floating particles
+  const particles = [];
+  for (let i = 0; i < 40; i++) {
+    particles.push({
       x: Math.random() * W,
       y: Math.random() * H,
-      r: Math.random() * 1.5 + 0.3,
-      speed: Math.random() * 0.3 + 0.05,
-      twinkle: Math.random() * Math.PI * 2,
-      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      r: Math.random() * 3 + 1,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.2 - 0.1,
+      alpha: Math.random() * 0.15 + 0.03,
+      color: ['rgba(196,117,107,', 'rgba(212,166,154,', 'rgba(173,216,230,', 'rgba(255,182,193,'][Math.floor(Math.random() * 4)],
     });
   }
 
-  // Shooting stars
-  const shootingStars = [];
-  function spawnShootingStar() {
-    if (shootingStars.length < 2 && Math.random() < 0.005) {
-      shootingStars.push({
-        x: Math.random() * W * 0.8,
-        y: Math.random() * H * 0.3,
-        len: Math.random() * 80 + 60,
-        speed: Math.random() * 8 + 6,
-        life: 1,
-        angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+  // 小爱心飘落
+  const hearts = [];
+  function spawnHeart() {
+    if (hearts.length < 5 && Math.random() < 0.008) {
+      hearts.push({
+        x: Math.random() * W,
+        y: -20,
+        size: Math.random() * 8 + 6,
+        vy: Math.random() * 0.5 + 0.3,
+        vx: (Math.random() - 0.5) * 0.5,
+        alpha: Math.random() * 0.15 + 0.05,
+        rotate: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.02,
       });
     }
+  }
+
+  function drawHeart(ctx, x, y, size, alpha, rotate) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rotate);
+    ctx.beginPath();
+    const s = size / 10;
+    ctx.moveTo(0, -s * 2);
+    ctx.bezierCurveTo(s * 3, -s * 6, s * 7, -s * 2, 0, s * 4);
+    ctx.bezierCurveTo(-s * 7, -s * 2, -s * 3, -s * 6, 0, -s * 2);
+    ctx.fillStyle = `rgba(196,117,107,${alpha})`;
+    ctx.fill();
+    ctx.restore();
   }
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
 
-    // Stars
-    stars.forEach(s => {
-      s.twinkle += s.twinkleSpeed;
-      const alpha = 0.4 + Math.sin(s.twinkle) * 0.3;
-      const px = s.x + mouseX * s.speed * 8;
-      const py = s.y + mouseY * s.speed * 8;
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+      if (p.y < -10) p.y = H + 10;
+      if (p.y > H + 10) p.y = -10;
       ctx.beginPath();
-      ctx.arc(px, py, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(220,225,255,${alpha})`;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.alpha + ')';
       ctx.fill();
     });
 
-    // Shooting stars
-    spawnShootingStar();
-    for (let i = shootingStars.length - 1; i >= 0; i--) {
-      const ss = shootingStars[i];
-      const endX = ss.x + Math.cos(ss.angle) * ss.len;
-      const endY = ss.y + Math.sin(ss.angle) * ss.len;
-      const grad = ctx.createLinearGradient(ss.x, ss.y, endX, endY);
-      grad.addColorStop(0, `rgba(232,180,184,${ss.life})`);
-      grad.addColorStop(1, `rgba(232,180,184,0)`);
-      ctx.beginPath();
-      ctx.moveTo(ss.x, ss.y);
-      ctx.lineTo(endX, endY);
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-      ss.x += Math.cos(ss.angle) * ss.speed;
-      ss.y += Math.sin(ss.angle) * ss.speed;
-      ss.life -= 0.012;
-      if (ss.life <= 0) shootingStars.splice(i, 1);
+    spawnHeart();
+    for (let i = hearts.length - 1; i >= 0; i--) {
+      const h = hearts[i];
+      h.y += h.vy;
+      h.x += h.vx;
+      h.rotate += h.rotSpeed;
+      drawHeart(ctx, h.x, h.y, h.size, h.alpha, h.rotate);
+      if (h.y > H + 30) hearts.splice(i, 1);
     }
 
     requestAnimationFrame(draw);
@@ -634,9 +728,7 @@ function initNav() {
 function initReveal() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+      if (entry.isIntersecting) entry.target.classList.add('visible');
     });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
